@@ -55,10 +55,10 @@ impl EventDispatcher {
         info!("toggle_key: {:?}", config.toggle_key);
 
         Some(EventDispatcher {
-            config: config,
+            config,
 
-            tx: tx,
-            interception: interception,
+            tx,
+            interception,
 
             active: false,
 
@@ -81,6 +81,13 @@ impl EventDispatcher {
             let num_strokes = num_strokes as usize;
 
             for i in 0..num_strokes {
+                // let stroke = strokes[i];
+                // match stroke {
+                //     ic::Stroke::Keyboard { code, state,.. }
+                //     => info!("EVENT Keyboard code: {} state: {}", code as u8, state.bits()),
+                //     ic::Stroke::Mouse {x, y, ..}
+                //     => info!("EVENT Mouse x: {} y: {}", x, y)
+                // }
                 let send = self.process_stroke(device, strokes[i]);
                 if send {
                     self.interception.send(device, &strokes[i..i + 1]);
@@ -134,7 +141,7 @@ impl EventDispatcher {
             }
 
             let stroke = [ic::Stroke::Keyboard {
-                code: code,
+                code,
                 state: ic::KeyState::UP,
                 information: 0,
             }];

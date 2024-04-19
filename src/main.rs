@@ -61,6 +61,7 @@ fn main() {
         event_handler: event_handler_config,
     } = load_config(opts.config);
 
+    println!("{:?}", event_handler_config);
     let (tx, rx) = mpsc::channel();
 
     let event_handler_thread = thread::spawn(|| {

@@ -1,0 +1,59 @@
+Config(
+    event_dispatcher: (
+        // The key used to switch from normal operation to controller emulation:
+        // Grave (= tilde) is the key to the left of number 1 on the number row,
+        // and should work well for most cases
+        toggle_key: Grave,
+    ),
+
+    event_handler: (
+        // Unitless coefficient, scale 0 -> +inf as you would expect
+        sensitivity: 5, // @ 3200 DPI
+
+        // The window over which mouse velocity is estimated:
+        //     Lower  -> less input latency
+        //     Higher -> greater accuracy and smoother stick position estimation
+        sample_window: (secs: 0, nanos: 4500000), // 4.5ms
+
+        // The maximum duration to spin-loop for before running a controller update
+        // if no input is recieved (required for correct velocity estimation)
+        spin_period: (secs: 0, nanos: 2000000), // 2ms
+
+        // Audio alert when the current mouse velocity is more than oversteer_alert_threshold
+        // times the velocity required for maximum stick angle
+        oversteer_alert_enabled: true,
+        oversteer_alert_threshold: 1.8,
+        oversteer_alert: (volume: 0.05, frequency: 440),
+ 
+        // Enable a dodgy hack to fix mouse button state tracking for Left/Right steer binds
+        mouse_button_fix: true,
+        analog_circularize: true,
+        // Keys are bound to controller buttons which are then bound to in-game actions (by you)
+        // See src/types.rs for the available options
+        binds: {
+            //MouseMove accepts AnalogRight or AnalogLeft with values (x, y) where 0 - disabled, 1 - enabled
+            MouseMove: AnalogRight(1, -1),
+            Mouse(Left): Button(RightTrigger),
+            Mouse(Right): Button(LeftTrigger),
+            Mouse(Middle): Button(LeftThumb),      
+            Mouse(Button4): Button(X),             
+            Mouse(Button5): Button(RightShoulder),  
+
+            Keyboard(W): AnalogLeft(0, 1),
+            Keyboard(A): AnalogLeft(-1, 0),
+            Keyboard(S): AnalogLeft(0, -1),
+            Keyboard(D): AnalogLeft(1, 0),
+            Keyboard(F): Button(DpadUp),
+            Keyboard(Numpad1): Button(DpadLeft),
+            Keyboard(Numpad2): Button(DpadDown),     
+            Keyboard(Numpad3): Button(DpadRight),             
+            Keyboard(Space): Button(A), 
+            Keyboard(LeftShift): Button(LeftThumb),   
+            Keyboard(LeftControl): Button(B),           
+            Keyboard(E): Button(RightShoulder),
+            Keyboard(R): Button(X),             
+            Keyboard(V): Button(Y),             
+            Keyboard(Q): Button(LeftShoulder)              
+        },
+    )
+)
